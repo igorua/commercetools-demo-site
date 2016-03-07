@@ -1,0 +1,14 @@
+{
+  "name": "commercetools-demo-site-setup",
+  "description": "Documentation, Template and helpers to set up a commercetools demo shop",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "sphere-product-type-json-generator": "*",
+    "sphere-node-cli": "*",
+    "csv-mapper": "*",
+    "sphere-node-product-csv-sync": "*"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/nkuehn/commercetools-demo-site-setup"
+}
