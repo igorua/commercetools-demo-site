@@ -159,13 +159,13 @@ TODO commands to push to Heroku
   
 Alternatively, start the frontend server on your local computer (see the documentation in the SUNRISE project for that). 
 
-### Customize CSS
+### Customize CSS and Templates
 
-TODO 
+The SUNRISE Java project contains good documentation on how to customize the project a bit or a lot:
+ * https://github.com/sphereio/commercetools-sunrise-java/blob/master/ONBOARDING.md
+ * esp. from here on: https://github.com/sphereio/commercetools-sunrise-java/blob/master/ONBOARDING.md#basic-customization
 
-### Customize Templates
-
-TODO
+Typical Tasks for a demo: Change the Color Scheme, Mood Images and Logos, but don't touch the layout (yet). 
 
 ### Customize Logic
 
