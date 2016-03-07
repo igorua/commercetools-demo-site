@@ -127,7 +127,7 @@ It contains the necessary setup, helper scripts and sample files.
 As long as you don't push back to the commercetools GitHub, you can commit and version locally as you like. 
 You can also choose to fork it on GitHub, but keep in mind that sales prospects don't really like the information public. 
 
-To install the typically needed commercetools commandline tools, just run
+To install the typically needed commercetools commandline tools, run
 
 ```
 npm install
@@ -145,16 +145,23 @@ To customize the Demo Storefront, you will make use of the fact that the SUNRISE
 This effectively creates a fork of the project on a Heroku git server. The only inconvenience is that to conveniently access that git repository you have to 
 
  * install the [Heroku Toolbelt](https://toolbelt.heroku.com/) (essentially a Heroku CLI)
- * create a working directory on your local machine and `cd` there
+ * create a working directory on your local machine, `cd` there and run:
 
 ```
-TODO command to check out your app
+heroku git:clone -a myapp
+heroku plugins:install https://github.com/ddollar/heroku-push
 ```
 
-Now you have the source code on your computer. You can either let Heroku do work by comitting and pushing every change (Heroku will automatically restart the app on every push) 
+Now you have the source code on your computer plus an extenstion to the heroku cli that optionally lets you redeploy without git. 
+You can either let Heroku do work by pushing your changes there (Heroku will automatically restart the app on every push) :
 
 ```
-TODO commands to push to Heroku
+# raw files
+heroku push
+
+# alternative: via git
+$ git add -A
+$ git commit -m "a foobar commit"
 ```
   
 Alternatively, start the frontend server on your local computer (see the documentation in the SUNRISE project for that). 
