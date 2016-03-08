@@ -14,6 +14,22 @@
       # alternatively, comment out "includeCols" and just exclude certain columns (not recommended)
       # excludeCols:
       #   - "XXX"
+    -
+      # variantId needs to be generated ascending (never change this)
+      type: "addColumn"
+      toCol: "variantId"
+      valueTransformers:
+        -
+          type: "groupCounter"
+          startAt: 1
+    -
+      # productType is a required and built-in field. generate with fixed value if there's just one type.
+      type: "addColumn"
+      toCol: "productType"
+      valueTransformers:
+        -
+          type: "constant"
+          value: "default"
     # Now add more specific transformations below instead of just copying.
     # Examples can be found in the file "csv-mapping-examples.yaml"
     # The full documentation is at https://github.com/sphereio/csv-mapper/
