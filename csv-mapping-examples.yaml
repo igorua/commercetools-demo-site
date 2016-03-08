@@ -1,0 +1,252 @@
+---
+  description: "XXX"
+  groupColumn: 
+    col: "TODO"
+    type: "constant"
+  columnMapping: 
+    -
+      # the slug is our self generated product (=poor man's icecat model) identifier and sort criterion
+      type: "addColumn"
+      fromCol: "XXXproduct_name"
+      toCol: "slug"
+      valueTransformers:
+        -
+          type: "required"
+    -
+      # "sku" is a required built-in field.
+      type: "transformColumn"
+      fromCol: "product_id"
+      toCol: "sku"
+      valueTransformers:
+        -
+          type: "required"
+    -
+      # "name" is a translatable required and built-in field.
+      # this example also has a fallback logic to make sure the required field is always filled.
+      type: "addColumn"
+      # fromCol: "model_name"
+      toCol: "name.en"
+      valueTransformers:
+        -
+          type: "fallback"
+          valueTransformers:
+            -
+              type: "column"
+              col: "model_name"
+            -
+              type: "column"
+              col: "product_id"
+        -
+          type: "required"
+    -
+      # "description" is a translatable built-in field. Note the .de appendix to make sure the right language value is set.
+      type: "transformColumn"
+      fromCol: "Style_LongDesc"
+      toCol: "description.de"
+    # example of a simple renaming:
+    -
+      type: "transformColumn"
+      fromCol: "ean_upcs"
+      toCol: "ean_upc_set"
+    -
+      # "images" is a built-in field that should contain a semicolon-separated list of image URLs in the biggest available size.
+      # If the source has multiple images in separate columns, you have to concatenate them into one column.
+      type: "transformColumn"
+      fromCol: "High_res_img"
+      toCol: "images"
+    -
+      # "images" is a built-in field that should contain a semicolon-separated list of image URLs in the biggest available size.
+      # this is an example that takes images from many source columns
+      type: "addColumn"
+      toCol: "images"
+      valueTransformers:
+        -
+          type: "multipartString"
+          parts:
+            -
+              fromCol: "Images_Image1_FileName"
+              valueTransformers:
+                -
+                  type: "regexp"
+                  find: "(.+)"
+                  replace: "https://commercetools-datastore.s3.amazonaws.com/demos/fooBar/$1"
+            -
+              fromCol: "Images_Image2_FileName"
+              valueTransformers:
+                -
+                  type: "regexp"
+                  find: "(.+)"
+                  replace: ";https://commercetools-datastore.s3.amazonaws.com/demos/fooBar/$1"
+            #-
+            #  fromCol: "Images_Image3_FileName"
+            #  valueTransformers:
+            #    -
+            #      type: "regexp"
+            #      find: "(.+)"
+            #      replace: ";$1"
+            #-
+            #  fromCol: "Images_Image4_FileName"
+            #  valueTransformers:
+            #    -
+            #      type: "regexp"
+            #      find: "(.+)"
+            #      replace: ";$1"
+            #-
+            #  fromCol: "Images_Image5_FileName"
+            #  valueTransformers:
+            #    -
+            #      type: "regexp"
+            #      find: "(.+)"
+            #      replace: ";$1"
+
+    -
+      # "categories" is a built-in field in the format "Category>SameSubCategory" OR the externalId OR the slug (externalID is preferrable because most robust)
+      # Multiple semicolon-separated entries are possible if source data
+      type: "addColumn"
+      fromCol: "catid"
+      toCol: "categories"
+    -
+      # "prices" is a built-in filed name. target value needs to be in "EUR 9999; EUR 8999 salePrice; EUR 12000 MSRP" format
+      # e.g. if 99,99 is the regular price and there are two more named prices.
+      # this example employs a regular expression to generate the required format
+      type: "addColumn"
+      toCol: "prices"
+      valueTransformers:
+        -
+          type: "multipartString"
+          parts:
+            -
+             fromCol: "SKU_SellingPrice"
+             valueTransformers:
+               -
+                type: "regexp"
+                find: "^(\\d+),(\\d{2})"
+                replace: "EUR $1$2"
+    -
+      # tax is a required and built-in field. generate with "default" if not in the source data
+      type: "addColumn"
+      toCol: "tax"
+      valueTransformers:
+        -
+          type: "constant"
+          value: "default"
+    -
+      type: "transformColumn"
+      fromCol: "Quality"
+      toCol: "icecat_data_quality"
+    # an example that appends a fixed value:
+    -
+      type: "transformColumn"
+      toCol: "fact-url"
+      valueTransformers:
+        -
+          type: "multipartString"
+          parts:
+            -
+              fromCol: "URL"
+            -
+              valueTransformers:
+                -
+                  type: "constant"
+                  value: ";shopname=foobar"
+    # another concatenation example, prefix and postfix:
+    -
+      type: "transformColumn"
+      toCol: "xml_data_url"
+      valueTransformers:
+        -
+          type: "multipartString"
+          parts:
+            -
+              valueTransformers:
+                -
+                  type: "constant"
+                  value: "http://data.com/export/"
+            -
+              fromCol: "product_id"
+            -
+              valueTransformers:
+                -
+                  type: "constant"
+                  value: ".xml"
+    # a try with an embedded lookup table
+    -
+      type: "transformColumn"
+      fromCol: "on_market"
+      toCol: "on_market"
+      # valueTransformers:
+      #   -
+      #     type: "lookup"
+      #     values:
+      #       -
+      #         - "1"
+      #         - "true"
+      #       -
+      #         - "0"
+      #         - "false"
+    -
+      # date formats need to be converted to the ISO format:
+      # source format example here: 20140527134728
+      type: "transformColumn"
+      fromCol: "Updated"
+      toCol: "icecat_last_updated"
+      valueTransformers:
+        -
+          type: "regexp"
+          find: "\\s*(\\d{4})(\\d{2})(\\d{2})(\\d{2})(\\d{2})(\\d{2})\\s*"
+          replace: "$1-$2-$3T$4:$5:$6.000Z"
+    -
+      # "prices" is a built-in filed name. target value needs to be in "EUR 9999; EUR 8999 salePrice; EUR 12000 MSRP" format e.g. if 99,99 is the regular price and there are two more named prices.
+      type: "addColumn"
+      toCol: "prices"
+      valueTransformers: 
+        - 
+          type: "multipartString"
+          parts: 
+            - 
+              fromCol: "SKU_SellingPrice"
+              valueTransformers: 
+                - 
+                  type: "regexp"
+                  find: "^(\\d+),(\\d{2})"
+                  replace: "EUR $1$2"
+            - 
+              fromCol: "SKU_SellingPriceOld"
+              valueTransformers: 
+                - 
+                  type: "regexp"
+                  find: "^(\\d+),(\\d{2})"
+                  replace: ";EUR $1$2 priceOld"
+            - 
+              fromCol: "SKU_SellingPriceMSRP"
+              valueTransformers: 
+                - 
+                  type: "regexp"
+                  find: "^(\\d+),(\\d{2})"
+                  replace: ";EUR $1$2 MSRP"
+            - 
+              fromCol: "SKU_BuyingPrice"
+              valueTransformers: 
+                - 
+                  type: "regexp"
+                  find: "^(\\d+),(\\d{2})"
+                  replace: ";EUR $1$2 buyingPrice"
+    - 
+      # date formats need to be converted
+      type: "transformColumn"
+      fromCol: "SKU_InvoicingStartDate"
+      toCol: "SKU_InvoicingStartDate"
+      valueTransformers: 
+        - 
+          type: "regexp"
+          find: "\\s*(\\d{2}).(\\d{2}).(\\d{4})\\s*"
+          replace: "$3-$2-$1"
+    - 
+      type: "transformColumn"
+      fromCol: "SKU_InvoicingEndDate"
+      toCol: "SKU_InvoicingEndDate"
+      valueTransformers: 
+        - 
+          type: "regexp"
+          find: "\\s*(\\d{2}).(\\d{2}).(\\d{4})\\s*"
+          replace: "$3-$2-$1"
