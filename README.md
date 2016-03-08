@@ -1,6 +1,7 @@
 # Template and and Documentation to set up a demo webshop wiht the commercetools platform
 
 This README describes how ot set up a sales demo as easy as possible using free or commercetools provided cloud hosting. 
+This README describes how ot set up a sales demo as easy as possible using free or commercetools provided cloud hosting. 
 
 ## Summary of Tools and Implementations that you (may) need
 
@@ -64,14 +65,15 @@ Result: you know whether to try importing automatically or rather taking a subss
   1. Log in, go to "Organization Settings", choose or create the Organization (e.g. a special org for your demo sites)
   2. Navigate to "Manage Projects" and create a new one. Please choose a key that makes clear it's a demo or playground by appending `-demo` or something similar. 
     * Leads to less confusion and easier "please free this from billing" processes. 
-    * Does not "burn" the real project name key for the hopefully acquired client. Keys cannot be changed and are hard to re-use!  
+    * Does not "burn" the real project name key for the hopefully acquired customer. Keys cannot be changed and are hard to re-use!  
   3. Don't add the sample dataset (it does only work well with specific language / country seutps)
   4. Navigate to "Settings" and:
     * in Tab "International": configure just one language, county, currency and zone (it's not likely that you will import multilanguage, multichannel data in a sales demo and you can still do that later if you want)
     * in Tab "Taxes": add a Tax Category named "default", give that one Rate named "default" and set "included in price" as fits. 
     * in Tab "Shipping Methods": Add a Shipping Method with the Name of a carrier the prospect currently offers (or more). Set it as default. 
       * Add one Zone Rate
-        * Add one Price wiht a "free above" setting (yes, the structure has three levels of nesting) 
+        * Add one Price with a "free above" setting (yes, the structure has three levels of nesting)
+    * In Tab "General" _disable_ all HTML editor checkboxes (otherwise you risk breaking the layout)
   5. Navigate to "Developers" and
     * in Tab "Product Types", create a product type named "default", e.g. named "Standard Product"
       * for simple demos, it's easier to use a big "catch all attributes" product type definition. Better spend your time to model that one correctly than in differentiating types that then all just have plain String fields.  
@@ -90,6 +92,10 @@ Result: you know whether to try importing automatically or rather taking a subss
    
 ## Phase 4: Enter or Import Categories
   
+> First of all: Think well about which scope of the catalog you want to edit products for. Empty categories are not impressive. 
+
+> As of March 2016 there is a layout bug with long description texts. Stay concise. 
+
 TODO add detailed tips
   
 > Attention: The SUNRISE webshop does only periodically refresh the category tree from the platform. To force refresh, restart the Heroku app. 
@@ -97,6 +103,10 @@ TODO is there a smarter method?
 
 
 ## Phase 5: Model the product type
+
+> Tip: consider to first import only the minimum required data before adding lots of attributes. The SUNRISE demo works well without any custom attributes. 
+
+> Tip: if you work with product variants, you need at least the attribute(s) that differentiate the variants so the Frontend can show the variant selector dropdowns. 
 
 You can interactively model the product type in the Merchant Center. 
  * Take your time to understand the Attribute types and Constraints (precise documentation can be found here: http://dev.commercetools.com/http-api-projects-productTypes.html#attribute-definition )
@@ -106,7 +116,7 @@ You can interactively model the product type in the Merchant Center.
   * Enum is nice, Localizable Enum is nicer (you can "translate" / "rename" the values in the source datafeed
   * Although powerful, avoid Nested and Reference attributes in imports. They are trickier to import and harder to explain (esp. Nested)
 
-After having done that, 
+TODO configure SUNRISE product variant selection. 
 
 ## Phase 5: Enter or Import Products
   
