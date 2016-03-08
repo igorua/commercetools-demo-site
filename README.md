@@ -1,7 +1,6 @@
 # Template and and Documentation to set up a demo webshop wiht the commercetools platform
 
 This README describes how ot set up a sales demo as easy as possible using free or commercetools provided cloud hosting. 
-This README describes how ot set up a sales demo as easy as possible using free or commercetools provided cloud hosting. 
 
 ## Summary of Tools and Implementations that you (may) need
 
@@ -125,19 +124,18 @@ You can interactively model the product type in the Merchant Center.
   * Enum is nice, Localizable Enum is nicer (you can "translate" / "rename" the values in the source datafeed
   * Although powerful, avoid Nested and Reference attributes in imports. They are trickier to import and harder to explain (esp. Nested)
 
-TODO configure SUNRISE product variant selection. 
 
 ## Phase 5: Enter or Import Products
   
 ### Manually 
 
-TODO add practical tips. 
-
 > Don't forget to publish your products (There's a special button in the merchant center). If published, they become visible immediately. 
 
 ### Transform and Import a Datafeed
 
-TODO Generally: Maybe better let people use the Web based http://impex.sphere.io/ ?  PRO: less to install.  CON: less reproducible, problematic with large files, need to install csv-mapper anyways.  
+> *If* you plan to manually clean / transform the data e.g. in Excel or LibreOffice (instead of using the commercetools tools), you can skip the "Local Installation" Part.  
+
+#### Local Installation
 
 First of all, you need a newer [Node.js](https://nodejs.org/en/download/) runtime on your local machine (there are tips on using a package manager like Homebrew or apt at the bottom of the page).
 
@@ -155,8 +153,20 @@ Now you have a project-local installation of all the commandline tools, located 
 
 Now add your API client key and secret to the `.sphere-project-credentials.json` file so the CLI has them available. 
 
- * TODO explain csv-mapper, csv and json formats. 
- * TODO add template files to this project, esp. a csv-mapper example with typical cases. 
+#### Transform the Product Data to the right format. 
+
+ * use [the CSV-Mapper](https://github.com/sphereio/csv-mapper/) (or a spreadsheet if you don't want to be able to reproduce the results with updated data) to
+  * bring the CSV into the [format required by the CSV sync](https://github.com/sphereio/sphere-node-product-csv-sync#csv-format) 
+  * A lot of real-wold examples can be found in the [CSV-Mapper Examples File](./csv-mapping-examples.yaml) in this project.  
+  * A good way to start is the [csv-mapping.yaml](./csv-mapping.yaml) config template. 
+
+ * OR bring the JSON into the [format required by the JSON import](https://github.com/sphereio/sphere-product-import/blob/master/readme/product-import.md#sample-inputs) with your preferred tooling or programming language. 
+   But be warned: that is usually too much work for a quick demo setup. 
+  
+
+#### Running the Import
+
+[IMPEX Web GUI](https://impex.sphere.io/commands/product-import) is a cloud hosted version of the commercetools CLI toolings for your convenience. All CLIs are supported, but not the csv-mapper. 
 
 ## Phase 6: Customize the Look and CSS of the Demo storefront. 
 
