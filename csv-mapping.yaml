@@ -1,0 +1,20 @@
+---
+  description: "commercetools csv-mapper configuration template"
+  groupColumn:
+    # in "col" put the name of the column that identifies product variants that belong together (e.g. a master product identifier etc. If such an attribute missing, the product name can be a demo-suitable "hack" value).
+    col: "TODO FILL ME"
+    type: "constant"
+  columnMapping:
+    -
+      # start with just copying the columns over, that you need
+      type: "copyFromOriginal"
+      "includeCols":
+        - "TODO"
+        - "TODO2"
+      # alternatively, comment out "includeCols" and just exclude certain columns (not recommended)
+      # excludeCols:
+      #   - "XXX"
+    # Now add more specific transformations below instead of just copying.
+    # Examples can be found in the file "csv-mapping-examples.yaml"
+    # The full documentation is at https://github.com/sphereio/csv-mapper/
+    # More Examples here: https://github.com/sphereio/csv-mapper/tree/master/test-data

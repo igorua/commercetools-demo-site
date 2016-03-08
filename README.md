@@ -91,16 +91,25 @@ Result: you know whether to try importing automatically or rather taking a subss
    
    
 ## Phase 4: Enter or Import Categories
+
+### enter manually
+
+Not much to explain. You will get used to the UI. Mandatory fields:
+ * Name (in the "General Info" tab)
+ * Slug (in the "SEO" Tab)
   
 > First of all: Think well about which scope of the catalog you want to edit products for. Empty categories are not impressive. 
 
 > As of March 2016 there is a layout bug with long description texts. Stay concise. 
-
-TODO add detailed tips
   
-> Attention: The SUNRISE webshop does only periodically refresh the category tree from the platform. To force refresh, restart the Heroku app. 
-TODO is there a smarter method? 
+> Attention: The SUNRISE webshop does only periodically refresh the category tree from the platform. To force refresh, restart the Heroku app, or (much better) call the `/categories/refresh` in the webshop (e.g. http://my-sales-demo.herokuapp.com/categories/refresh )   
 
+### import automatically. 
+
+Please follow the documentation of the [commercetools CLI](https://github.com/sphereio/sphere-node-cli). Typical Issues to consider: 
+
+* Plan well, which identifier to use to map the products to the categories (externalId is usually the safest way)
+* Make sure that your category feed is ordered so that the parent categories are there before their children.  If you category feed is randomly ordered, do a two-pass import by first importing all categories "flat" without parent association and then running it again with parent associations, effectively building the tree). 
 
 ## Phase 5: Model the product type
 
@@ -184,14 +193,10 @@ The SUNRISE Java project contains good documentation on how to customize the pro
 
 Typical Tasks for a demo: Change the Color Scheme, Mood Images and Logos, but don't touch the layout (yet). 
 
+If you want to fully customize the theme or work on SCSS level, you should rather fork the complete [SUNRISE theme](https://github.com/sphereio/commercetools-sunrise-theme). But that is typically out of scope for a demonstration taks. 
+
 ### Customize Logic
 
 If you need to do this, you should reconsider whether you're still in demo mode or have migrated to doing a real project. 
 We do not recommend directly migrating a demo to a live project. It's not because the software is bad, but rather because it is a bad idea to not do thorough analysis on the data modeling and overall technical project architecture. 
 Commercetools does offer Trainings to build Webshops on the foundation of the SUNRISE Framework. 
-
-
-
-    
- 
- 
