@@ -1,39 +1,42 @@
+> [START HERE](#necessary-accounts)
+
 # Template and and Documentation to set up a demo webshop wiht the commercetools platform
 
 This README describes how ot set up a sales demo as easy as possible using free or commercetools provided cloud hosting. 
 
-## Summary of Tools and Implementations that you (may) need
+Editors: For goals vs. non-goals see the [Contribution Guide](CONTRIBUTE.md). 
 
-For sure:
-
- * The default CTP webshop ["SUNRISE" in Java](https://github.com/sphereio/commercetools-sunrise-java/) Java or [PHP](https://github.com/sphereio/commercetools-sunrise-php)
- * The default [SUNRISE theme](https://github.com/sphereio/commercetools-sunrise-theme) 
-
-Depending on the data situation the commercetools import tooling:
-
- * [Generate CTP product types from a CSV based format](https://github.com/sphereio/sphere-product-type-json-generator)
- * [Import Category Trees into CTP](https://github.com/sphereio/sphere-category-sync) via the [commercetools CLI](https://github.com/sphereio/sphere-node-cli)
- * CSV based product import:
-   * [CSV mapper to bring the file into the right format](https://github.com/sphereio/csv-mapper/)
-   * [CTP CSV Product Sync / Import](https://github.com/sphereio/sphere-node-product-csv-sync)
- * JSON based product import:
-   * [CTP product importer - part of the commercetools / sphere CLI](https://github.com/sphereio/sphere-node-cli)
-
-Optional additional tooling:
-
- * the [Heroku Toolbelt]() helps you in checking out and changing the shop frontend you created.  
- * [CSVKit to analze, clean up etc. CSV files](https://github.com/wireservice/csvkit)
- * Excel or LibreOffice to work manually with CSV files
- * a decent XML and JSON viewer / editor (if you're not in an IDE anyways)
- 
 ## Necessary Accounts
 
 (both free for the purpose fo demo applications) 
 
   * [set up a personal account on the commercetools platform](https://admin.sphere.io/en/signup). 
-    If your company already has an "Organization" in the commercetools platform, ask a colleague to invite you. Otherwise you will get a fresh personal organization on signup.
-  * [create an account at Heroku.com to temporarily host your web frontend](https://signup.heroku.com/). Heroku is a service that lets you run server applications as "dynos" with own web address. It's free for up to five dynos. If a free dyno is not used, it's put into sleep and restarted the next time someone is using it. 
- 
+    If your company already has an "Organization" in the commercetools platform, ask a colleague to invite you. 
+    Otherwise you will get a fresh personal organization on signup.
+  * [create an account at Heroku.com to temporarily host your web frontend](https://signup.heroku.com/). 
+    Heroku is a service that lets you run server applications as "dynos" with own web address. 
+    It's free for up to five dynos. If a free dyno is not used, it's put into sleep and restarted the next time someone is using it. 
+
+## Tools and Software Implementations mentioned in this Tutorial: 
+
+Minimum for all:
+
+ * The default CTP webshop ["SUNRISE" in Java](https://github.com/sphereio/commercetools-sunrise-java/) Java or [PHP](https://github.com/sphereio/commercetools-sunrise-php)
+ * The default [SUNRISE theme](https://github.com/sphereio/commercetools-sunrise-theme) 
+ * the [Heroku Toolbelt](https://toolbelt.heroku.com/) helps you in checking out and changing the shop frontend you created.  
+
+To transform and work with datafiles the following help:
+
+ * a decent XML and / or JSON viewer (if you're not in an IDE like [IntelliJ IDEA](https://www.jetbrains.com/idea/) anyways)
+ * CSV based product import:
+   * Excel or LibreOffice to work manually with CSV files
+   * (Mac or Linux only:) [CSVKit to analze, clean up etc. CSV files](https://github.com/wireservice/csvkit)
+   * [CSV mapper to bring the file into the right format](https://github.com/sphereio/csv-mapper/)
+   * [CTP CSV Product Sync / Import](https://github.com/sphereio/sphere-node-product-csv-sync)
+ * JSON based product import:
+   * [CTP product importer - part of the commercetools / sphere CLI](https://github.com/sphereio/sphere-node-cli)
+ * [Import Category Trees into CTP](https://github.com/sphereio/sphere-category-sync) via the [commercetools CLI](https://github.com/sphereio/sphere-node-cli)
+  
 ## Phase 1: Analysis
  
 OK, so now you have a prospect and want to show him commercetools, but not "just" the API to make clear that he/she will really get a webshop from you and that it will really be responsive etc. pp. 
@@ -48,7 +51,7 @@ structure and quality:
  
   1. Content: What's in? Is it enough for a demo to be sensible? (e.g. no description texts and no images -> demo will look bad -> type data yourself). Some random Tips:
    * CSV: Opening in a Spreadsheet application can give a good first impression
-   * CSV: CSVkit's `csvstat` command generates very helpful statistics on column types, value distribution, value density etc.
+   * CSV, mac & unix only: CSVkit's `csvstat` command generates very helpful statistics on column types, value distribution, value density etc.
   2. Structure: 
    * What field means what? 
    * Is there a concept of product variants? how are they identified?
@@ -65,9 +68,9 @@ Result: you know whether to try importing automatically or rather taking a subss
   2. Navigate to "Manage Projects" and create a new one. Please choose a key that makes clear it's a demo or playground by appending `-demo` or something similar. 
     * Leads to less confusion and easier "please free this from billing" processes. 
     * Does not "burn" the real project name key for the hopefully acquired customer. Keys cannot be changed and are hard to re-use!  
-  3. Don't add the sample dataset (it does only work well with specific language / country seutps)
+  3. Don't add the sample dataset (it does only work well with specific language / country setups)
   4. Navigate to "Settings" and:
-    * in Tab "International": configure just one language, county, currency and zone (it's not likely that you will import multilanguage, multichannel data in a sales demo and you can still do that later if you want)
+    * in Tab "International": configure just one language (please use be english as of march 2016, [will be fixed](https://github.com/sphereio/commercetools-sunrise-java/issues/342)), country, currency and zone (it's not likely that you will import multilanguage, multichannel data in a sales demo and you can still do that later if you want)
     * in Tab "Taxes": add a Tax Category named "default", give that one Rate named "default" and set "included in price" as fits. 
     * in Tab "Shipping Methods": Add a Shipping Method with the Name of a carrier the prospect currently offers (or more). Set it as default. 
       * Add one Zone Rate
@@ -85,25 +88,24 @@ Result: you know whether to try importing automatically or rather taking a subss
    2. Fill "App Name" with what you want to be in the URL of the demo shop (better not leave blank)
    3. The nice people at commercetools have prepared the project so that you get a nice form to configure the UI now:
      * Fill Project Key, Client ID and Client Secret of your platform project (they are safe here if you have a secure Heroku password)
-     * FILL ALL OTHER VARIABLES LATER WHEN YOU HAVE DONE THE DATA MODELING. You can find them as "environemnt variables" in the app / dyno settings. 
+     * Just don't bother about the other values (you will change them later as suitable). You can find them as "config vars" in the app / dyno settings. 
    4. Press "deploy for free", wait a while and hooray, you should have a working, but empty online store live on the web.  
-   
+
+> Heroku UI Tip: Important actions like "restart", "open app" and "view log" are in the top right three-dot "hamburger" menu. 
    
 ## Phase 4: Enter or Import Categories
 
-### enter manually
+### a) enter manually
 
 Not much to explain. You will get used to the UI. Mandatory fields:
  * Name (in the "General Info" tab)
  * Slug (in the "SEO" Tab)
   
 > First of all: Think well about which scope of the catalog you want to edit products for. Empty categories are not impressive. 
-
-> As of March 2016 there is a layout bug with long description texts. Stay concise. 
   
 > Attention: The SUNRISE webshop does only periodically refresh the category tree from the platform. To force refresh, restart the Heroku app, or (much better) call the `/categories/refresh` in the webshop (e.g. http://my-sales-demo.herokuapp.com/categories/refresh )   
 
-### import automatically. 
+### b) import automatically. 
 
 Please follow the documentation of the [commercetools CLI](https://github.com/sphereio/sphere-node-cli). Typical Issues to consider: 
 
@@ -112,9 +114,11 @@ Please follow the documentation of the [commercetools CLI](https://github.com/sp
 
 ## Phase 5: Model the product type
 
-> Tip: consider to first import only the minimum required data before adding lots of attributes. The SUNRISE demo works well without any custom attributes. 
+> Tip: consider to first import only the minimum required data before adding lots of attributes. 
+> The SUNRISE demo works well without any custom attributes. 
 
 > Tip: if you work with product variants, you need at least the attribute(s) that differentiate the variants so the Frontend can show the variant selector dropdowns. 
+> This attribute should have the constraint "combination unique" set. 
 
 You can interactively model the product type in the Merchant Center. 
  * Take your time to understand the Attribute types and Constraints (precise documentation can be found here: http://dev.commercetools.com/http-api-projects-productTypes.html#attribute-definition )
@@ -122,18 +126,42 @@ You can interactively model the product type in the Merchant Center.
  * Type speficific hints:
   * to fill the localizable types with multiple language values from CSV, append e.g. `.de` or `.en` to the column name. 
   * Enum is nice, Localizable Enum is nicer (you can "translate" / "rename" the values in the source datafeed
-  * Although powerful, avoid Nested and Reference attributes in imports. They are trickier to import and harder to explain (esp. Nested)
+  * Although powerful, avoid Nested and Reference attributes in demo imports unless they play a key role in the project. They are not as easy to import and harder to explain (esp. Nested)
 
+After you modeled your default product type, go into the "Settings" tab in the Heroku Backend, click "Reveal Config Vars" and set the following: 
+
+ * `HARD_SELECTABLE_ATTRIBUTES` = put the attribute name that differentiates the variants (or a comma separated list)
+ * `DISPLAYED_ATTRIBUTES` = put all custom attributes names as a comma separated list to let the webshop show them in a table.
 
 ## Phase 5: Enter or Import Products
   
-### Manually 
+### Manually
 
-> Don't forget to publish your products (There's a special button in the merchant center). If published, they become visible immediately. 
+Products are added in the Products Section of the [Merchant Center](https://admin.sphere.io). 
+
+Data required for the webshop demo:
+
+ * Name (at least in english)
+ * Tax category ("default")
+ * A sku 
+ * At least one price for the currency used (leave country, customer group, etc in default "All" state)
+ * The variant selection attribute you defined in the product type
+ * A product must be assigend to at least one category (until a bug is fixed in sunrise). 
+   * It is recommended to assign the product to the parent categories of its categories, too.  
+
+Data recommended to be filled for the demo
+
+ * A Description 
+ * At least one Image (plase fill in the dimensions if you are entering an external URL instead of uploading the image) 
+ * you can remove the random number from the end of the slug (SEO tab) to get nicer URLs
+
+
+> Don't forget to publish your products (There's a special button in the "overview" tab)! 
+> Once published, they become visible immediately, otherwise you will waste a lot of "it's a feature, not a bug" time.  
 
 ### Transform and Import a Datafeed
 
-> *If* you plan to manually clean / transform the data e.g. in Excel or LibreOffice (instead of using the commercetools tools), you can skip the "Local Installation" Part.  
+> *If* you plan to manually clean / transform the data e.g. in Excel or LibreOffice (instead of using the commercetools tools), skip the "Local Installation" Part and [continue here](#running-the-import).  
 
 #### Local Installation
 
@@ -178,30 +206,36 @@ This effectively creates a fork of the project on a Heroku git server. The only 
 
 ```
 heroku git:clone -a myapp
-heroku plugins:install https://github.com/ddollar/heroku-push
 ```
 
-Now you have the source code on your computer plus an extenstion to the heroku cli that optionally lets you redeploy without git. 
-You can either let Heroku do work by pushing your changes there (Heroku will automatically restart the app on every push) :
+Now you have the source code on your computer (in a a new subdirectory). You can open the files there in any editor or ideally in an IDE.
+
+The easiest setup is not run the frontend locally at all but let Heroku do all the work for you.  
+Every time you push changes to Heroku, it will directly rebuild and redeploy the application and you will directly see the build log, errors etc. in your local console. 
+
+So after you did your changes you can run:
 
 ```
-# raw files
-heroku push
-
-# alternative: via git
 $ git add -A
-$ git commit -m "a foobar commit"
+$ git commit -am "some comment"
+$ git push
 ```
+(the first command is only necessary if you have added new files)
   
 Alternatively, start the frontend server on your local computer (see the documentation in the SUNRISE project for that). 
 
-### Customize CSS and Templates
-
-The SUNRISE Java project contains good documentation on how to customize the project a bit or a lot:
- * https://github.com/sphereio/commercetools-sunrise-java/blob/master/ONBOARDING.md
- * esp. from here on: https://github.com/sphereio/commercetools-sunrise-java/blob/master/ONBOARDING.md#basic-customization
+### Customize the look
 
 Typical Tasks for a demo: Change the Color Scheme, Mood Images and Logos, but don't touch the layout (yet). 
+
+The recommended way (least amout of learning curve and software setup complexity) is to try to do all changes in CSS and Javascript. 
+For this reason, SUNRISE already contains two empty files especially for demo tasks:
+ * `./public/stylesheet/sunrise.css` (loaded in the HTML head)
+ * `./public/javascripts/sunrise.js` (loaded at at the end of the page load process)
+
+The SUNRISE Java project contains good documentation on how to customize the project a bit or a lot or completely like in a production project.
+ * https://github.com/sphereio/commercetools-sunrise-java/blob/master/ONBOARDING.md
+ * esp. from here on: https://github.com/sphereio/commercetools-sunrise-java/blob/master/ONBOARDING.md#basic-customization
 
 If you want to fully customize the theme or work on SCSS level, you should rather fork the complete [SUNRISE theme](https://github.com/sphereio/commercetools-sunrise-theme). But that is typically out of scope for a demonstration taks. 
 
