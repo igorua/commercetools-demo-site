@@ -1,4 +1,4 @@
-> [START HERE](#necessary-accounts)
+[START HERE](#necessary-accounts)
 
 # Template and and Documentation to set up a demo webshop wiht the commercetools platform
 
@@ -123,9 +123,9 @@ Please follow the documentation of the [commercetools CLI](https://github.com/sp
 You can interactively model the product type in the Merchant Center. 
  * Take your time to understand the Attribute types and Constraints (precise documentation can be found here: http://dev.commercetools.com/http-api-projects-productTypes.html#attribute-definition )
  * From you analyis (see above), rather choose just a few core attributes and do them right instead of trying completeness. E.g. a well configured "Enum" creates a dropdown in the PIM section of the Merchant Ceter, which is more impressive than an array of 50 text fields.
- * Type speficific hints:
+ * Type specific hints:
   * to fill the localizable types with multiple language values from CSV, append e.g. `.de` or `.en` to the column name. 
-  * Enum is nice, Localizable Enum is nicer (you can "translate" / "rename" the values in the source datafeed
+  * Enum is nice, Localizable Enum is nicer (you can "translate" / "rename" the values in the source datafeed).
   * Although powerful, avoid Nested and Reference attributes in demo imports unless they play a key role in the project. They are not as easy to import and harder to explain (esp. Nested)
 
 After you modeled your default product type, go into the "Settings" tab in the Heroku Backend, click "Reveal Config Vars" and set the following: 
@@ -151,12 +151,12 @@ Data required for the webshop demo:
 
 Data recommended to be filled for the demo
 
- * A Description 
+ * A description 
  * At least one Image (plase fill in the dimensions if you are entering an external URL instead of uploading the image) 
- * you can remove the random number from the end of the slug (SEO tab) to get nicer URLs
+ * You can remove the random number from the end of the slug (SEO tab) to get nicer URLs
 
 
-> Don't forget to publish your products (There's a special button in the "overview" tab)! 
+> Don't forget to publish your products (there's a special button in the "overview" tab)! 
 > Once published, they become visible immediately, otherwise you will waste a lot of "it's a feature, not a bug" time.  
 
 ### Transform and Import a Datafeed
@@ -196,9 +196,9 @@ Now add your API client key and secret to the `.sphere-project-credentials.json`
 
 [IMPEX Web GUI](https://impex.sphere.io/commands/product-import) is a cloud hosted version of the commercetools CLI toolings for your convenience. All CLIs are supported, but not the csv-mapper. 
 
-## Phase 6: Customize the Look and CSS of the Demo storefront. 
+## Phase 6: Customize the Look and CSS of the demo storefront. 
 
-To customize the Demo Storefront, you will make use of the fact that the SUNRISE storefront has been directly deployed from GitHub to Heroku. 
+To customize the demo storefront, you will make use of the fact that the SUNRISE storefront has been directly deployed from GitHub to Heroku. 
 This effectively creates a fork of the project on a Heroku git server. The only inconvenience is that to conveniently access that git repository you have to 
 
  * install the [Heroku Toolbelt](https://toolbelt.heroku.com/) (essentially a Heroku CLI)
@@ -226,12 +226,14 @@ Alternatively, start the frontend server on your local computer (see the documen
 
 ### Customize the look
 
-Typical Tasks for a demo: Change the Color Scheme, Mood Images and Logos, but don't touch the layout (yet). 
+Typical tasks for a demo: Change the color scheme, mood images and logos, but don't touch the layout (yet). 
 
 The recommended way (least amout of learning curve and software setup complexity) is to try to do all changes in CSS and Javascript. 
 For this reason, SUNRISE already contains two empty files especially for demo tasks:
  * `./public/stylesheet/sunrise.css` (loaded in the HTML head)
  * `./public/javascripts/sunrise.js` (loaded at at the end of the page load process)
+
+#### Advanced customizations
 
 The SUNRISE Java project contains good documentation on how to customize the project a bit or a lot or completely like in a production project.
  * https://github.com/sphereio/commercetools-sunrise-java/blob/master/ONBOARDING.md
@@ -239,8 +241,8 @@ The SUNRISE Java project contains good documentation on how to customize the pro
 
 If you want to fully customize the theme or work on SCSS level, you should rather fork the complete [SUNRISE theme](https://github.com/sphereio/commercetools-sunrise-theme). But that is typically out of scope for a demonstration taks. 
 
-### Customize Logic
+### Customize Logic?
 
 If you need to do this, you should reconsider whether you're still in demo mode or have migrated to doing a real project. 
 We do not recommend directly migrating a demo to a live project. It's not because the software is bad, but rather because it is a bad idea to not do thorough analysis on the data modeling and overall technical project architecture. 
-Commercetools does offer Trainings to build Webshops on the foundation of the SUNRISE Framework. 
+Commercetools does offer trainings to build web storefronts on the foundation of the SUNRISE framework. 
