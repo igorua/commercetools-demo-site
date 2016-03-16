@@ -177,7 +177,19 @@ To install the typically needed commercetools commandline tools, run
 ```
 npm install
 ```
-Now you have a project-local installation of all the commandline tools, located in `./node_modules/.bin/`  
+Now you have a project-local installation of all the commandline tools, located in `./node_modules/.bin/`. The following commands are available:
+```
+# transform CSVs:
+./node_modules/.bin/csv-mapper
+# import / sync products from CSV:
+./node_modules/.bin/product-csv-sync
+# import / sync categories form CSV:
+./node_modules/.bin/category-sync
+# import / sync products from JSON:
+./node_modules/.bin/sphere-import
+# generic CLI:
+./node_modules/.bin/sphere
+```
 
 Now add your API client key and secret to the `.sphere-project-credentials.json` file so the CLI has them available. 
 
