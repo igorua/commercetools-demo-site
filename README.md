@@ -1,14 +1,14 @@
 [START HERE](#necessary-accounts)
 
-# Template and and Documentation to set up a demo webshop wiht the commercetools platform
+# Template and Documentation to set up a demo webshop with the commercetools platform
 
-This README describes how ot set up a sales demo as easy as possible using free or commercetools provided cloud hosting. 
+This README describes how to set up a sales demo as easy as possible using free or commercetools provided cloud hosting. 
 
 Editors: For goals vs. non-goals see the [Contribution Guide](CONTRIBUTE.md). 
 
 ## Necessary Accounts
 
-(both free for the purpose fo demo applications) 
+(both free for the purpose of demo applications) 
 
   * [set up a personal account on the commercetools platform](https://admin.sphere.io/en/signup). 
     If your company already has an "Organization" in the commercetools platform, ask a colleague to invite you. 
@@ -23,14 +23,14 @@ Minimum for all:
 
  * The default CTP webshop ["SUNRISE" in Java](https://github.com/sphereio/commercetools-sunrise-java/) Java or [PHP](https://github.com/sphereio/commercetools-sunrise-php)
  * The default [SUNRISE theme](https://github.com/sphereio/commercetools-sunrise-theme) 
- * the [Heroku Toolbelt](https://toolbelt.heroku.com/) helps you in checking out and changing the shop frontend you created.  
+ * The [Heroku Toolbelt](https://toolbelt.heroku.com/) helps you in checking out and changing the shop frontend you created.  
 
 To transform and work with datafiles the following help:
 
  * a decent XML and / or JSON viewer (if you're not in an IDE like [IntelliJ IDEA](https://www.jetbrains.com/idea/) anyways)
  * CSV based product import:
    * Excel or LibreOffice to work manually with CSV files
-   * (Mac or Linux only:) [CSVKit to analze, clean up etc. CSV files](https://github.com/wireservice/csvkit)
+   * (Mac or Linux only:) [CSVKit to analyze, clean up etc. CSV files](https://github.com/wireservice/csvkit)
    * [CSV mapper to bring the file into the right format](https://github.com/sphereio/csv-mapper/)
    * [CTP CSV Product Sync / Import](https://github.com/sphereio/sphere-node-product-csv-sync)
  * JSON based product import:
@@ -46,33 +46,32 @@ OK, so now you have a prospect and want to show him commercetools, but not "just
 Although typing in seems awkward, it can often be the much more efficient choice, especially when it comes to product types (=the data model) and the categories. 
 If you have not received sample data it's clear anyways: Take a coffee, open [the Merchant Center](https://admin.sphere.io) and create the custom's world from scratch. 
  
-If you have received sample data (often some product CSV feed or a specialized XML format), the first step is to get an idea of the content, 
-structure and quality: 
+If you have received sample data (often some product CSV feed or a specialized XML format), the first step is to get an idea of the content, structure and quality: 
  
   1. Content: What's in? Is it enough for a demo to be sensible? (e.g. no description texts and no images -> demo will look bad -> type data yourself). Some random Tips:
    * CSV: Opening in a Spreadsheet application can give a good first impression
    * CSV, mac & unix only: CSVkit's `csvstat` command generates very helpful statistics on column types, value distribution, value density etc.
   2. Structure: 
    * What field means what? 
-   * Is there a concept of product variants? how are they identified?
+   * Is there a concept of product variants? How are they identified?
    * Is it possible to create absolute paths to the live images? 
-   * How are the price data structured?  Net or Gross? VAT included in price or not? 
+   * How are the price data structured? Net or Gross? VAT included in price or not? 
    * ... 
   3. Quality: Is it good enough for a visual demo (e.g. most fields empty? -> type data yourself)? 
  
-Result: you know whether to try importing automatically or rather taking a subsset of the catalog and typing that in. 
+Result: you know whether to try importing automatically or rather taking a subset of the catalog and typing that in. 
  
 ## Phase 2: Commercetools Setup
   
-  1. Log in, go to "Organization Settings", choose or create the Organization (e.g. a special org for your demo sites)
+  1. Log in, go to "Organization Settings", choose or create the Organization (e.g. a special org for your demo sites).
   2. Navigate to "Manage Projects" and create a new one. Please choose a key that makes clear it's a demo or playground by appending `-demo` or something similar. 
     * Leads to less confusion and easier "please free this from billing" processes. 
     * Does not "burn" the real project name key for the hopefully acquired customer. Keys cannot be changed and are hard to re-use!  
   3. Don't add the sample dataset (it does only work well with specific language / country setups)
   4. Navigate to "Settings" and:
-    * in Tab "International": configure just one language (please use be english as of march 2016, [will be fixed](https://github.com/sphereio/commercetools-sunrise-java/issues/342)), country, currency and zone (it's not likely that you will import multilanguage, multichannel data in a sales demo and you can still do that later if you want)
+    * in Tab "International": configure just one language (please use be English as of March 2016, [will be fixed](https://github.com/sphereio/commercetools-sunrise-java/issues/342)), country, currency and zone (it's not likely that you will import multilanguage, multichannel data in a sales demo and you can still do that later if you want)
     * in Tab "Taxes": add a Tax Category named "default", give that one Rate named "default" and set "included in price" as fits. 
-    * in Tab "Shipping Methods": Add a Shipping Method with the Name of a carrier the prospect currently offers (or more). Set it as default. 
+    * in Tab "Shipping Methods": Add a Shipping Method with the `name` of a carrier the prospect currently offers (or more). Set it as default. 
       * Add one Zone Rate
         * Add one Price with a "free above" setting (yes, the structure has three levels of nesting)
     * In Tab "General" _disable_ all HTML editor checkboxes (otherwise you risk breaking the layout)
@@ -122,7 +121,7 @@ Please follow the documentation of the [commercetools CLI](https://github.com/sp
 
 You can interactively model the product type in the Merchant Center. 
  * Take your time to understand the Attribute types and Constraints (precise documentation can be found here: http://dev.commercetools.com/http-api-projects-productTypes.html#attribute-definition )
- * From you analyis (see above), rather choose just a few core attributes and do them right instead of trying completeness. E.g. a well configured "Enum" creates a dropdown in the PIM section of the Merchant Ceter, which is more impressive than an array of 50 text fields.
+ * From you analyis (see above), rather choose just a few core attributes and do them right instead of trying completeness. E.g. a well configured "Enum" creates a dropdown in the PIM section of the Merchant Center, which is more impressive than an array of 50 text fields.
  * Type specific hints:
   * to fill the localizable types with multiple language values from CSV, append e.g. `.de` or `.en` to the column name. 
   * Enum is nice, Localizable Enum is nicer (you can "translate" / "rename" the values in the source datafeed).
@@ -146,7 +145,7 @@ Data required for the webshop demo:
  * A sku 
  * At least one price for the currency used (leave country, customer group, etc in default "All" state)
  * The variant selection attribute you defined in the product type
- * A product must be assigend to at least one category (until a bug is fixed in sunrise). 
+ * A product must be assigend to at least one category (until a bug is fixed in sunrise https://github.com/sphereio/commercetools-sunrise-java/issues/340). 
    * It is recommended to assign the product to the parent categories of its categories, too.  
 
 Data recommended to be filled for the demo
@@ -197,7 +196,7 @@ Now add your API client key and secret to the `.sphere-project-credentials.json`
 
  * use [the CSV-Mapper](https://github.com/sphereio/csv-mapper/) (or a spreadsheet if you don't want to be able to reproduce the results with updated data) to
   * bring the CSV into the [format required by the CSV sync](https://github.com/sphereio/sphere-node-product-csv-sync#csv-format) 
-  * A lot of real-wold examples can be found in the [CSV-Mapper Examples File](./csv-mapping-examples.yaml) in this project.  
+  * A lot of real-world examples can be found in the [CSV-Mapper Examples File](./csv-mapping-examples.yaml) in this project.  
   * A good way to start is the [csv-mapping.yaml](./csv-mapping.yaml) config template. 
 
  * OR bring the JSON into the [format required by the JSON import](https://github.com/sphereio/sphere-product-import/blob/master/readme/product-import.md#sample-inputs) with your preferred tooling or programming language. 
