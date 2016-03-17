@@ -132,7 +132,7 @@ After you modeled your default product type, go into the "Settings" tab in the H
  * `HARD_SELECTABLE_ATTRIBUTES` = put the attribute name that differentiates the variants (or a comma separated list)
  * `DISPLAYED_ATTRIBUTES` = put all custom attributes names as a comma separated list to let the webshop show them in a table.
 
-## Phase 5: Enter or Import Products
+## Phase 6: Enter or Import Products
   
 ### Manually
 
@@ -207,7 +207,7 @@ Now add your API client key and secret to the `.sphere-project-credentials.json`
 
 [IMPEX Web GUI](https://impex.sphere.io/commands/product-import) is a cloud hosted version of the commercetools CLI toolings for your convenience. All CLIs are supported, but not the csv-mapper. 
 
-## Phase 6: Customize the Look and CSS of the demo storefront. 
+## Phase 7: Customize the Look and CSS of the demo storefront. 
 
 To customize the demo storefront, you will make use of the fact that the SUNRISE storefront has been directly deployed from GitHub to Heroku. 
 This effectively creates a fork of the project on a Heroku git server. The only inconvenience is that to conveniently access that git repository you have to 
