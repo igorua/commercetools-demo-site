@@ -1,0 +1,554 @@
+---
+  description: "more mapping examples"
+  groupColumn:
+    # p_nr groups both color and pattern and size. let#s see if that looks good or not.
+    col: "p_nr"
+    type: "constant"
+  columnMapping:
+    -
+      # variantId needs to be generated ascending (never change this)
+      type: "addColumn"
+      toCol: "variantId"
+      valueTransformers:
+        -
+          type: "groupCounter"
+          startAt: 1
+    -
+      # productType is a required and built-in field. generate with fixed value if there's just one type.
+      type: "addColumn"
+      toCol: "productType"
+      valueTransformers:
+        -
+          type: "constant"
+          value: "default"
+    -
+      # the slug is our self generated product URL part
+      type: "addColumn"
+      toCol: "slug"
+      valueTransformers:
+        -
+          type: "multipartString"
+          parts:
+            -
+              fromCol: "p_name"
+            -
+              valueTransformers:
+                -
+                  type: "constant"
+                  value: "-"
+            -
+              fromCol: "a_comp[color]"
+            -
+              valueTransformers:
+                -
+                  type: "constant"
+                  value: "-"
+            -
+              fromCol: "a_nr"
+        -
+          type: "slugify"
+        -
+          type: "required"
+    -
+      # "sku" is a required built-in field.
+      type: "addColumn"
+      fromCol: "a_nr"
+      toCol: "sku"
+      valueTransformers:
+        -
+          type: "required"
+    -
+      # "name" is a translatable required and built-in field.
+      # this example also has a fallback logic to make sure the required field is always filled.
+      type: "addColumn"
+      toCol: "name.de"
+      valueTransformers:
+        -
+          type: "fallback"
+          valueTransformers:
+            -
+              type: "column"
+              col: "p_name_proper"
+            -
+              type: "column"
+              col: "product_id"
+        -
+          type: "required"
+    -
+      # same thing again for english
+      type: "addColumn"
+      toCol: "name.en"
+      valueTransformers:
+        -
+          type: "fallback"
+          valueTransformers:
+            -
+              type: "column"
+              col: "p_name_proper"
+            -
+              type: "column"
+              col: "product_id"
+        -
+          type: "required"
+    -
+      # "description" is a translatable built-in field.
+      type: "addColumn"
+      fromCol: "p_text"
+      toCol: "description.de"
+    -
+      # ... and the f***in app is hard-hardcoded to english.
+      type: "addColumn"
+      fromCol: "p_text"
+      toCol: "description.en"
+    -
+      # "categories" is a built-in field and we use the externalId
+      # Multiple semicolon-separated entries are possible if source data
+      type: "addColumn"
+      toCol: "categories"
+      valueTransformers:
+        -
+          type: "multipartString"
+          parts:
+            -
+              fromCol: "p_tag[gender]{0}"
+              valueTransformers:
+              -
+                type: "lookup"
+                header: false
+                keyCol: 0
+                valueCol: 1
+                values:
+                  -
+                    - "XXX"
+                    - "UNUSED"
+                  -
+                    - "für alle"
+                    - "women"
+                  -
+                    - "für Babies"
+                    - "babies"
+                  -
+                    - "für Frauen"
+                    - "women"
+                  -
+                    - "für Frauen und Männer"
+                    - "women"
+                  -
+                    - "für Jungen"
+                    - "boys"
+                  -
+                    - "für Jungen und Mädchen"
+                    - "girls"
+                  -
+                    - "für Jungs"
+                    - "boys"
+                  -
+                    - "für Kinder"
+                    - "boys"
+                  -
+                    - "für Mädchen"
+                    - "girls"
+                  -
+                    - "für Mädchen und Jungen"
+                    - "girls"
+                  -
+                    - "für Männer"
+                    - "men"
+                  -
+                    - "für Männer und Frauen"
+                    - "men"
+                  -
+                    - "male"
+                    - "men"
+                  -
+                    - "unisex"
+                    - "women"
+            -
+              valueTransformers:
+              -
+                type: "constant"
+                value: "-"
+            -
+              fromCol: "p_name_keyword"
+              valueTransformers:
+              -
+                type: "slugify"
+    -
+      # "keywords" is a translatable built-in field. Not required for english.
+      type: "addColumn"
+      fromCol: "p_keywords"
+      toCol: "metaKeywords.de"
+# searchKeywords creates empty fields and does not like these data.
+#    -
+#      # "search keywords" is a translatable built-in field.
+#      type: "addColumn"
+#      fromCol: "p_keywords"
+#      toCol: "searchKeywords.de"
+    -
+      # tax is a required and built-in field that sets the tax category by name. we just have a "default" category here.
+      type: "addColumn"
+      toCol: "tax"
+      valueTransformers:
+        -
+          type: "constant"
+          value: "default"
+    -
+      # "images" is a built-in field that should contain a semicolon-separated list of image URLs in the biggest available size.
+      # this is an example that takes images from many source columns
+      type: "addColumn"
+      toCol: "images"
+      valueTransformers:
+        -
+          type: "multipartString"
+          parts:
+            -
+              fromCol: "a_media[image]{0}"
+            -
+              fromCol: "a_media[image]{1}"
+              valueTransformers:
+                -
+                  type: "regexp"
+                  find: "^(.*)"
+                  replace: ";$1"
+            -
+              fromCol: "a_media[image]{2}"
+              valueTransformers:
+                -
+                  type: "regexp"
+                  find: "^(.*)"
+                  replace: ";$1"
+            -
+              fromCol: "a_media[image]{3}"
+              valueTransformers:
+                -
+                  type: "regexp"
+                  find: "^(.*)"
+                  replace: ";$1"
+            -
+              fromCol: "a_media[image]{4}"
+              valueTransformers:
+                -
+                  type: "regexp"
+                  find: "^(.*)"
+                  replace: ";$1"
+            -
+              fromCol: "a_media[image]{5}"
+              valueTransformers:
+                -
+                  type: "regexp"
+                  find: "^(.*)"
+                  replace: ";$1"
+    -
+      # "prices" is a built-in filed name. target value needs to be in "EUR 9999; EUR 8999 salePrice; EUR 12000 MSRP" format e.g. if 99,99 is the regular price and there are two more named prices.
+      type: "addColumn"
+      toCol: "prices"
+      valueTransformers:
+        -
+          type: "multipartString"
+          parts:
+            -
+              fromCol: "a_vk[zade]"
+              valueTransformers:
+                -
+                  type: "fallback"
+                  valueTransformers:
+                    -
+                      type: "regexp"
+                      find: "^(\\d+).(\\d{2})"
+                      replace: "EUR $1$2 priceReduced"
+                    -
+                      type: "constant"
+                      value: "EUR 0 priceReduced"
+            -
+              fromCol: "a_vk_old[zade]"
+              valueTransformers:
+                -
+                  type: "regexp"
+                  find: "^(\\d+).(\\d{2})"
+                  replace: ";EUR $1$2"
+    -
+      # color is a combination unique field
+      type: "addColumn"
+      fromCol: "a_comp[color]"
+      toCol: "color.de"
+    -
+      # just dupe it! english.
+      type: "addColumn"
+      fromCol: "a_comp[color]"
+      toCol: "color.en"
+    -
+      # color is a combination unique field
+      type: "addColumn"
+      fromCol: "a_comp[size]"
+      toCol: "size"
+    -
+      # fit pattern is a same for all  field
+      type: "addColumn"
+      fromCol: "p_comp[fitpattern]"
+      toCol: "fit-pattern"
+    -
+      # fit length is a same for all  field
+      type: "addColumn"
+      fromCol: "p_comp[leevelength]"
+      toCol: "fit-length"
+    -
+      # material is a same for all  field
+      type: "addColumn"
+      fromCol: "p_comp[mat]"
+      toCol: "material.de"
+    -
+      # who cares about real localization?  Just make the crappy app happy!
+      type: "addColumn"
+      fromCol: "p_comp[mat]"
+      toCol: "material.en"
+    -
+      # brand is a same for all  Lenum
+      type: "addColumn"
+      fromCol: "p_brand"
+      toCol: "brand"
+    -
+      # age is a same for all  Lenum
+      type: "addColumn"
+      fromCol: "p_tag[altersgruppe]{0}"
+      toCol: "age"
+    -
+      # is_active_zade is a boolean without constraint
+      type: "addColumn"
+      fromCol: "p_active[zade]"
+      toCol: "is_active_zade"
+      valueTransformers:
+        -
+          type: "lookup"
+          header: false
+          keyCol: 0
+          valueCol: 1
+          values:
+            -
+              - "XXX"
+              - "UNUSED"
+            -
+              - "1"
+              - "true"
+            -
+              - "0"
+              - "false"
+    -
+      # genders is a set of lenum entries
+      type: "addColumn"
+      toCol: "genders"
+      valueTransformers:
+        -
+          type: "multipartString"
+          parts:
+            -
+              fromCol: "p_tag[gender]{0}"
+              valueTransformers:
+              -
+                type: "lookup"
+                header: false
+                keyCol: 0
+                valueCol: 1
+                values:
+                  -
+                    - "XXX"
+                    - "UNUSED"
+                  -
+                    - "für alle"
+                    - "all"
+                  -
+                    - "für Babies"
+                    - "babies"
+                  -
+                    - "für Frauen"
+                    - "women"
+                  -
+                    - "für Frauen und Männer"
+                    - "women;men"
+                  -
+                    - "für Jungen"
+                    - "boys"
+                  -
+                    - "für Jungen und Mädchen"
+                    - "girls"
+                  -
+                    - "für Jungs"
+                    - "boys"
+                  -
+                    - "für Kinder"
+                    - "boys;girls"
+                  -
+                    - "für Mädchen"
+                    - "girls"
+                  -
+                    - "für Mädchen und Jungen"
+                    - "girls;boys"
+                  -
+                    - "für Männer"
+                    - "men"
+                  -
+                    - "für Männer und Frauen"
+                    - "men;women"
+                  -
+                    - "male"
+                    - "men2"
+                  -
+                    - "unisex"
+                    - "unisex"
+            -
+              fromCol: "p_tag[gender]{1}"
+              valueTransformers:
+              -
+                type: "lookup"
+                header: false
+                keyCol: 0
+                valueCol: 1
+                values:
+                  -
+                    - "XXX"
+                    - ";UNUSED"
+                  -
+                    - "für alle"
+                    - ";all"
+                  -
+                    - "für Babies"
+                    - ";babies"
+                  -
+                    - "für Frauen"
+                    - ";women"
+                  -
+                    - "für Frauen und Männer"
+                    - ";women;men"
+                  -
+                    - "für Jungen"
+                    - ";boys"
+                  -
+                    - "für Jungen und Mädchen"
+                    - ";girls"
+                  -
+                    - "für Jungs"
+                    - ";boys"
+                  -
+                    - "für Kinder"
+                    - ";boys;girls"
+                  -
+                    - "für Mädchen"
+                    - ";girls"
+                  -
+                    - "für Mädchen und Jungen"
+                    - ";girls;boys"
+                  -
+                    - "für Männer"
+                    - ";men"
+                  -
+                    - "für Männer und Frauen"
+                    - ";men;women"
+                  -
+                    - "male"
+                    - ";men2"
+                  -
+                    - "unisex"
+                    - ";unisex"
+    -
+      # the season is a set of Numbers
+      type: "addColumn"
+      toCol: "seasons"
+      valueTransformers:
+        -
+          type: "multipartString"
+          parts:
+            -
+              fromCol: "p_tag[saison]{0}"
+            -
+              fromCol: "p_tag[saison]{1}"
+              valueTransformers:
+                -
+                  type: "regexp"
+                  find: "^(.*)"
+                  replace: ";$1"
+#  Does not work as the second column is not fully filled (would need to move to regex based transform to write the semicolon only if there's a value)
+#            -
+#              valueTransformers:
+#                -
+#                  type: "constant"
+#                  value: ";"
+#            -
+#              fromCol: "p_tag[saison]{1}"
+    -
+      type: "addColumn"
+      toCol: "feature_bullets.de"
+      valueTransformers:
+        -
+          type: "multipartString"
+          parts:
+            -
+              fromCol: "p_bullet{0}"
+            -
+              fromCol: "p_bullet{1}"
+              valueTransformers:
+                -
+                  type: "regexp"
+                  find: "^(.*)"
+                  replace: ";$1"
+            -
+              fromCol: "p_bullet{2}"
+              valueTransformers:
+                -
+                  type: "regexp"
+                  find: "^(.*)"
+                  replace: ";$1"
+            -
+              fromCol: "p_bullet{3}"
+              valueTransformers:
+                -
+                  type: "regexp"
+                  find: "^(.*)"
+                  replace: ";$1"
+            -
+              fromCol: "p_bullet{4}"
+              valueTransformers:
+                -
+                  type: "regexp"
+                  find: "^(.*)"
+                  replace: ";$1"
+            -
+              fromCol: "p_bullet{5}"
+              valueTransformers:
+                -
+                  type: "regexp"
+                  find: "^(.*)"
+                  replace: ";$1"
+            -
+              fromCol: "p_bullet{6}"
+              valueTransformers:
+                -
+                  type: "regexp"
+                  find: "^(.*)"
+                  replace: ";$1"
+            -
+              fromCol: "p_bullet{7}"
+              valueTransformers:
+                -
+                  type: "regexp"
+                  find: "^(.*)"
+                  replace: ";$1"
+            -
+              fromCol: "p_bullet{8}"
+              valueTransformers:
+                -
+                  type: "regexp"
+                  find: "^(.*)"
+                  replace: ";$1"
+            -
+              fromCol: "p_bullet{9}"
+              valueTransformers:
+                -
+                  type: "regexp"
+                  find: "^(.*)"
+                  replace: ";$1"
+            -
+              fromCol: "p_bullet{10}"
+              valueTransformers:
+                -
+                  type: "regexp"
+                  find: "^(.*)"
+                  replace: ";$1"

@@ -6,6 +6,8 @@ This README describes how to set up a sales demo as easy as possible using free 
 
 Editors: For goals vs. non-goals see the [Contribution Guide](CONTRIBUTE.md). 
 
+You can start by [duplicating this repository](https://help.github.com/articles/duplicating-a-repository/) (forking leaves the repo public).  
+
 ## Necessary Accounts
 
 (both free for the purpose of demo applications) 
@@ -79,7 +81,7 @@ Result: you know whether to try importing automatically or rather taking a subse
     * in Tab "Product Types", create a product type named "default", e.g. named "Standard Product"
       * for simple demos, it's easier to use a big "catch all attributes" product type definition. Better spend your time to model that one correctly than in differentiating types that then all just have plain String fields.  
       * (do the attribute modeling later)
-    * Find the Tab "API Clients". You will need the Client ID and Client Secret a lot later on. 
+    * Find the Tab "API Clients". You will need the Client ID and Client Secret a lot later on. Best directly put them into the `.sphere-project-credentials` file of this project
      
 ## Phase 3: Fire up a SUNRISE demo storefront
    
@@ -194,6 +196,7 @@ Now add your API client key and secret to the `.sphere-project-credentials.json`
 
 #### Transform the Product Data to the right format. 
 
+ * first formally clean the input CSV. This repository contains [a self-documenting `transform-csv.sh` shell script with the usually necessary steps](transform-csv.sh). 
  * use [the CSV-Mapper](https://github.com/sphereio/csv-mapper/) (or a spreadsheet if you don't want to be able to reproduce the results with updated data) to
   * bring the CSV into the [format required by the CSV sync](https://github.com/sphereio/sphere-node-product-csv-sync#csv-format) 
   * A lot of real-world examples can be found in the [CSV-Mapper Examples File](./csv-mapping-examples.yaml) in this project.  

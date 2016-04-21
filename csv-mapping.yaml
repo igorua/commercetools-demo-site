@@ -1,36 +1,143 @@
 ---
   description: "commercetools csv-mapper configuration template"
+  ## 1: REQUIRED STRUCTURE: define what are prouduct variants belonging together and auto-create an incrementing counter for the variants:
   groupColumn:
-    # in "col" put the name of the column that identifies product variants that belong together (e.g. a master product identifier etc. If such an attribute missing, the product name can be a demo-suitable "hack" value).
+    # in "col" put the name of the column that identifies product variants that belong together
+    # (e.g. a master product identifier etc. If such an attribute missing, you can try the product name as a best-guess good-enough-for-a-demo value.
     col: "TODO FILL ME"
     type: "constant"
   columnMapping:
     -
-      # start with just copying the columns over, that you need
-      type: "copyFromOriginal"
-      "includeCols":
-        - "TODO"
-        - "TODO2"
-      # alternatively, comment out "includeCols" and just exclude certain columns (not recommended)
-      # excludeCols:
-      #   - "XXX"
-    -
-      # variantId needs to be generated ascending (never change this)
+      # generate a variantId that is ascending inside the project (DO NOT change this)
       type: "addColumn"
       toCol: "variantId"
       valueTransformers:
         -
           type: "groupCounter"
           startAt: 1
+    ## 2: REQUIRED BOILERPLATE:
     -
-      # productType is a required and built-in field. generate with fixed value if there's just one type.
+      # productType is a required and built-in field. in a CSV-driven demo you ususally just use one type, so just put the name of that here ("default" is recommended)
       type: "addColumn"
       toCol: "productType"
       valueTransformers:
         -
           type: "constant"
           value: "default"
-    # Now add more specific transformations below instead of just copying.
-    # Examples can be found in the file "csv-mapping-examples.yaml"
+    -
+      # tax is a required and built-in field that sets the tax category by name. for demo purposes we just have a "default" tax category here
+      # (you can configure the rates per country in the admin center inside that default tax category).
+      # user interfaces and checkouts will fail hard if a product has no tax category.
+      type: "addColumn"
+      toCol: "tax"
+      valueTransformers:
+        -
+          type: "constant"
+          value: "default"
+    ## 3: REQUIRED FIELDS YOU HAVE TO FILL:
+    -
+      # "sku" is a required built-in field that identifies the variant
+      type: "addColumn"
+      fromCol: "TODO YOUR COLUMN NAME"
+      toCol: "sku"
+      valueTransformers:
+        -
+          type: "required"
+    -
+      # the slug is the URL component of the prouduct. Technically it is optional, but your demo URLs will not look convincing without.
+      type: "addColumn"
+      toCol: "slug"
+      valueTransformers:
+        -
+          type: "multipartString"
+          parts:
+            -
+              fromCol: "TODO PRODUCT NAME COLUMN"
+            -
+              valueTransformers:
+                -
+                  type: "constant"
+                  value: "-"
+            -
+              fromCol: "TODO THE SKU / UNIQUE IDENTIFIER"
+        -
+          type: "slugify"
+        -
+          type: "required"
+    -
+      # "name" is a translatable required and built-in field.
+      type: "addColumn"
+      toCol: "name"
+      valueTransformers:
+        -
+          type: "fallback"
+          valueTransformers:
+            -
+              type: "column"
+              col: "TODO YOUR NAME COLUMN"
+            -
+              type: "column"
+              col: "TODO YOUR SKU / ID COLUMN AS A FALLBACK"
+        -
+          type: "required"
+    -
+      # "prices" is a fixed field name. target value needs to be in "EUR 9999; EUR 8999 myCustomerGroup" format
+      #  e.g. if 99,99 is the regular (non-discounted) price and there is a customer group that has a cheaper base price.
+      # A demo looks really bad without prices and the cart and checkout will not work. So they are de facto required.
+      type: "addColumn"
+      toCol: "prices"
+      valueTransformers:
+        -
+          type: "multipartString"
+          parts:
+            -
+              fromCol: "TODO YOUR PRICE COLUMN"
+              valueTransformers:
+                -
+                  type: "regexp"
+                  find: "^(\\d+).(\\d{2})"
+                  replace: "EUR $1$2"
+
+    ## 4: built-in commercetools fields that we recommend to fill for a good demo but that are not mandatory
+    -
+      # "description" is a translatable built-in field.
+      type: "addColumn"
+      fromCol: "TODO YOUR DESCRIPTION COLUMN"
+      toCol: "description"
+    -
+      # "images" is a built-in field that should contain a semicolon-separated list of image URLs
+      # this is an example that takes images from separate source columns and concatenates them with a semicolon.
+      # If your feed already has multiple URLs in one column, you will probably have to replace the separator via a custom regexp.
+      type: "addColumn"
+      toCol: "images"
+      valueTransformers:
+        -
+          type: "multipartString"
+          parts:
+            -
+              fromCol: "TODO IMAGE1"
+            -
+              fromCol: "TODO IMAGE2"
+              valueTransformers:
+                -
+                  type: "regexp"
+                  find: "^(.*)"
+                  replace: ";$1"
+            -
+              fromCol: "TODO IMAGE3"
+              valueTransformers:
+                -
+                  type: "regexp"
+                  find: "^(.*)"
+                  replace: ";$1"
+
+    # 4: Now add more specific transformations below instead of just copying.
+    # Examples can be found in the file "csv-mapping-examples.yaml" and "csv-mapping-examples2-yaml"
     # The full documentation is at https://github.com/sphereio/csv-mapper/
     # More Examples here: https://github.com/sphereio/csv-mapper/tree/master/test-data
+    -
+      # finish with stuff that has to just copied over:
+      type: "copyFromOriginal"
+      "includeCols":
+        # - "TODO"
+        # - "TODO2"
